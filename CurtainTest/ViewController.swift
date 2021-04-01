@@ -19,10 +19,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bottomCurtainViewController = BottomCurtainViewController(heightCurtain: 700)
+        bottomCurtainViewController = BottomCurtainViewController(heightCurtain: 950)
         bottomCurtainViewController.delegate = self
         
-        bottomCurtainViewController.registerCell(nib: UINib(nibName: "CustomTableViewCell", bundle: nil), identifier: "Cell")
+        bottomCurtainViewController.contentTableView.register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "Cell")
         
         self.addChild(bottomCurtainViewController)
         

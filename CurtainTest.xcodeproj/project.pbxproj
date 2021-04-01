@@ -11,6 +11,8 @@
 		B35201EE2615AA5700C92E6B /* BottomCurtainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B35201ED2615AA5700C92E6B /* BottomCurtainViewController.xib */; };
 		B35201F22615ACE300C92E6B /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35201F02615ACE300C92E6B /* CustomTableViewCell.swift */; };
 		B35201F32615ACE300C92E6B /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B35201F12615ACE300C92E6B /* CustomTableViewCell.xib */; };
+		B35202082615D59D00C92E6B /* BottomCurtainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35202072615D59D00C92E6B /* BottomCurtainPresenter.swift */; };
+		B352020B2615E36700C92E6B /* BottomCurtainViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B352020A2615E36700C92E6B /* BottomCurtainViewProtocol.swift */; };
 		B3627EC626149AB90093590A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3627EC526149AB90093590A /* AppDelegate.swift */; };
 		B3627EC826149AB90093590A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3627EC726149AB90093590A /* SceneDelegate.swift */; };
 		B3627ECA26149AB90093590A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3627EC926149AB90093590A /* ViewController.swift */; };
@@ -26,6 +28,8 @@
 		B35201ED2615AA5700C92E6B /* BottomCurtainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BottomCurtainViewController.xib; sourceTree = "<group>"; };
 		B35201F02615ACE300C92E6B /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		B35201F12615ACE300C92E6B /* CustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell.xib; sourceTree = "<group>"; };
+		B35202072615D59D00C92E6B /* BottomCurtainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCurtainPresenter.swift; sourceTree = "<group>"; };
+		B352020A2615E36700C92E6B /* BottomCurtainViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCurtainViewProtocol.swift; sourceTree = "<group>"; };
 		B3627EC226149AB90093590A /* CurtainTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurtainTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3627EC526149AB90093590A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B3627EC726149AB90093590A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -54,6 +58,7 @@
 			children = (
 				B3627EDA26149E840093590A /* BottomCurtainViewController.swift */,
 				B35201ED2615AA5700C92E6B /* BottomCurtainViewController.xib */,
+				B35202072615D59D00C92E6B /* BottomCurtainPresenter.swift */,
 			);
 			path = BottomCurtainViewController;
 			sourceTree = "<group>";
@@ -70,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				B35201E72615A79F00C92E6B /* BottomCurtainColorsProtocol.swift */,
+				B352020A2615E36700C92E6B /* BottomCurtainViewProtocol.swift */,
 			);
 			path = BottomCurtainProtocols;
 			sourceTree = "<group>";
@@ -199,6 +205,8 @@
 			files = (
 				B3627ECA26149AB90093590A /* ViewController.swift in Sources */,
 				B35201E82615A79F00C92E6B /* BottomCurtainColorsProtocol.swift in Sources */,
+				B35202082615D59D00C92E6B /* BottomCurtainPresenter.swift in Sources */,
+				B352020B2615E36700C92E6B /* BottomCurtainViewProtocol.swift in Sources */,
 				B3627EDC26149E840093590A /* BottomCurtainViewController.swift in Sources */,
 				B35201F22615ACE300C92E6B /* CustomTableViewCell.swift in Sources */,
 				B3627EC626149AB90093590A /* AppDelegate.swift in Sources */,

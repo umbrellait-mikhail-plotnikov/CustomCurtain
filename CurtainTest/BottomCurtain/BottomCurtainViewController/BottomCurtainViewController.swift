@@ -7,40 +7,34 @@
 
 import UIKit
 
-class BottomCurtainViewController: UIViewController {
+class BottomCurtainViewController: UIViewController, BottomCurtainViewProtocol {
     
-    private var absolutePanPosition: CGFloat = 0
-    private var cellClassArray = [AnyClass]()
-    private var cellIdentifierArray = [String]()
-    private let bottomCurtainNibName = "BottomCurtainViewController"
-    private weak var creatorView: UIView?
-    private var stateCurtain: BottomCurtainStateEnum = .close
-    private let heightCurtain: CGFloat!
-    private let maxHeightForOpen: CGFloat!
+    weak var creatorView: UIView? {
+        presenter.creatorView
+    }
+    private var presenter: BottomCurtainPresenter
     
-    private let blurEffectView: UIVisualEffectView = {
+    let bottomCurtainNibName = "BottomCurtainViewController"
+    let blurEffectView: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         let blurredEffectView = UIVisualEffectView(effect: blurEffect)
         blurredEffectView.alpha = 0
-        
+    
         return blurredEffectView
     }()
     
     @IBOutlet private weak var sizeContentTableViewConstraint: NSLayoutConstraint!
     @IBOutlet public weak var contentTableView: UITableView!
-    @IBOutlet private weak var handleSize: NSLayoutConstraint!
+    @IBOutlet weak var handleSize: NSLayoutConstraint!
     @IBOutlet private weak var handleView: UIView!
     @IBOutlet private weak var handleViewBlackStick: UIView!
     @IBOutlet private weak var contentView: UIView!
     
-    public func registerCell(nib: UINib, identifier: String) {
-        contentTableView.register(nib, forCellReuseIdentifier: identifier)
-    }
-    
     public weak var delegate: (UIViewController & UITableViewDelegate & UITableViewDataSource)? {
         didSet {
-            creatorView = delegate?.view
-            self.view.frame = CGRect(x: 0, y: creatorView!.bounds.height - handleSize.constant, width: creatorView!.bounds.width, height: maxHeightForOpen)
+            presenter.creatorView = delegate?.view
+            presenter.checkHeight()
+            self.view.frame = CGRect(x: 0, y: creatorView!.bounds.height - handleSize.constant, width: creatorView!.bounds.width, height: presenter.maxHeightForOpen)
             blurEffectView.frame = creatorView!.frame
             
             contentTableView.delegate = delegate
@@ -51,129 +45,93 @@ class BottomCurtainViewController: UIViewController {
         }
     }
     
-    private func semiOpenCurtain(_ duration: TimeInterval = 0.1) {
-        guard let creatorView = creatorView else { return }
-        var height: CGFloat = 0
-        UIView.animate(withDuration: duration) { [self] in
-            if let firstCellHeight = contentTableView.cellForRow(at: IndexPath(row: 0, section: 0))?.bounds.height {
-                height = creatorView.bounds.height - firstCellHeight - handleSize.constant
-            } else {
-                height = creatorView.bounds.height - self.heightCurtain / 2
-            }
-            
-            self.view.frame.origin.y = height
-            blurringBackground(0.5)
-            updateHeightContentTableView()
-        }
-        stateCurtain = .semi
+    func getOrigin() -> CGPoint {
+        return self.view.frame.origin
     }
     
-    private func openCurtain(_ duration: TimeInterval = 0.1) {
+    func setOrigin(point: CGPoint) {
+        self.view.frame.origin = point
+    }
+    
+    func semiOpenCurtain(_ duration: TimeInterval = 0.1) {
+        UIView.animate(withDuration: duration) { [self] in
+            
+            self.view.frame.origin.y = presenter.calculateSemiHeight(contentTableView: contentTableView)
+            
+            presenter.blurringBackground(0.5)
+            updateHeightContentTableView()
+        }
+        presenter.stateCurtain = .semi
+    }
+    
+     func openCurtain(_ duration: TimeInterval = 0.1) {
         guard let creatorView = creatorView else { return }
         UIView.animate(withDuration: duration) { [self] in
-            self.view.frame.origin.y = creatorView.bounds.height - (self.heightCurtain)
-            blurringBackground(1)
+            self.view.frame.origin.y = creatorView.bounds.height - (presenter.heightCurtain)
+            presenter.blurringBackground(1)
             updateHeightContentTableView()
         }
         
-        stateCurtain = .open
+        presenter.stateCurtain = .open
     }
     
-    private func closeCurtain(_ duration: TimeInterval = 0.3) {
+     func closeCurtain(_ duration: TimeInterval = 0.3) {
         guard let creatorView = creatorView else { return }
         UIView.animate(withDuration: duration) { [self] in
             self.view.frame.origin.y = creatorView.bounds.height - self.handleSize.constant
-            self.blurringBackground(0)
+            presenter.blurringBackground(0)
             updateHeightContentTableView()
         }
         
-        stateCurtain = .close
+        presenter.stateCurtain = .close
     }
     
-    private func blurringBackground(_ alpha: CGFloat? = nil) {
-        guard let creatorView = creatorView else { return }
-        guard alpha == nil else {
-            blurEffectView.alpha = alpha!
-            return
-        }
-        let absoluteCurtainPosition = creatorView.frame.height - self.view.frame.origin.y
-        let percent = 1 - ((heightCurtain - absoluteCurtainPosition) / heightCurtain)
-        blurEffectView.alpha = percent > 1 ? 1 : percent
-    }
-    
-    private func updateHeightContentTableView() {
+    func updateHeightContentTableView() {
         guard let creatorView = creatorView else { return }
         let height = creatorView.frame.height - self.view.frame.origin.y
         sizeContentTableViewConstraint.constant = height > 0 ? height : 0
     }
     
     @objc
-    private func handlePanRecognizer(recognizer: UIPanGestureRecognizer) {
-        guard let creatorView = creatorView else { return }
-        let location = recognizer.location(in: creatorView.self)
-        let positionY = location.y - handleSize.constant / 2
-        absolutePanPosition = creatorView.frame.height - positionY
-       
-        updateHeightContentTableView()
-        blurringBackground()
-        
-        if recognizer.state == .changed {
-            
-            if absolutePanPosition > maxHeightForOpen{
-                openCurtain()
-            } else {
-                self.view.frame.origin.y = positionY
-            }
-            
-        } else if recognizer.state == .ended {
-            
-            if absolutePanPosition > maxHeightForOpen || absolutePanPosition > maxHeightForOpen * 0.4 {
-                openCurtain()
-            } else {
-                closeCurtain()
-            }
-        }
+     func handlePanRecognizer(recognizer: UIPanGestureRecognizer) {
+        presenter.handlePanRecognizer(recognizer: recognizer)
     }
     
     @objc
-    private func handleTapRecognizer(recognizer: UITapGestureRecognizer) {
-        
-        if stateCurtain == .open {
-            closeCurtain()
-        } else if stateCurtain == .close {
-            semiOpenCurtain(0.2)
-        } else if stateCurtain == .semi {
-            openCurtain(0.2)
-        } else {
-            fatalError()
-        }
-        
+     func handleTapRecognizer(recognizer: UITapGestureRecognizer) {
+        presenter.handleTapRecognizer(recognizer: recognizer)
     }
     
     @objc
-    private func handleCreatorViewTapRecognizer(recognizer: UITapGestureRecognizer) {
+     func handleCreatorViewTapRecognizer(recognizer: UITapGestureRecognizer) {
         closeCurtain()
     }
     
     init(heightCurtain: CGFloat) {
-        self.heightCurtain = heightCurtain
-        self.maxHeightForOpen = heightCurtain + 50
+
+        self.presenter = BottomCurtainPresenter()
         super.init(nibName: bottomCurtainNibName, bundle: nil)
+        presenter.delegate = self
+        presenter.heightCurtain = heightCurtain
+    }
+    
+    private func setupGestureRecognizers() {
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanRecognizer))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapRecognizer))
+        let creatorViewTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleCreatorViewTapRecognizer))
+        creatorViewTapRecognizer.delegate = self
+        
+        creatorView?.addGestureRecognizer(creatorViewTapRecognizer)
+        handleView.addGestureRecognizer(tapRecognizer)
+        handleView.addGestureRecognizer(panRecognizer)
     }
     
     override func viewDidLoad() {
         
         contentTableView.contentInset = UIEdgeInsets(top: handleSize.constant / 2, left: 0, bottom: handleSize.constant / 2, right: 0)
-        
         handleViewBlackStick.layer.cornerRadius = 3
-        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanRecognizer))
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapRecognizer))
-        let creatorViewTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleCreatorViewTapRecognizer))
         
-        creatorViewTapRecognizer.delegate = self
-        creatorView?.addGestureRecognizer(creatorViewTapRecognizer)
-        handleView.addGestureRecognizer(tapRecognizer)
-        handleView.addGestureRecognizer(panRecognizer)
+        setupGestureRecognizers()
     }
     
     required init?(coder: NSCoder) {
