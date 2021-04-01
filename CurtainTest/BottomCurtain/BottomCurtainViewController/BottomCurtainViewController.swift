@@ -14,6 +14,7 @@ class BottomCurtainViewController: UIViewController, BottomCurtainViewProtocol {
     }
     private var presenter: BottomCurtainPresenter
     
+    var diff: CGFloat = 0
     let bottomCurtainNibName = "BottomCurtainViewController"
     let blurEffectView: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
@@ -37,7 +38,7 @@ class BottomCurtainViewController: UIViewController, BottomCurtainViewProtocol {
             self.view.frame = CGRect(x: 0, y: creatorView!.bounds.height - handleSize.constant, width: creatorView!.bounds.width, height: presenter.maxHeightForOpen)
             blurEffectView.frame = creatorView!.frame
             
-            contentTableView.delegate = delegate
+            contentTableView.delegate = self
             contentTableView.dataSource = delegate
             
             creatorView!.addSubview(blurEffectView)
@@ -64,7 +65,7 @@ class BottomCurtainViewController: UIViewController, BottomCurtainViewProtocol {
         presenter.stateCurtain = .semi
     }
     
-     func openCurtain(_ duration: TimeInterval = 0.1) {
+    func openCurtain(_ duration: TimeInterval = 0.1) {
         guard let creatorView = creatorView else { return }
         UIView.animate(withDuration: duration) { [self] in
             self.view.frame.origin.y = creatorView.bounds.height - (presenter.heightCurtain)
@@ -75,7 +76,7 @@ class BottomCurtainViewController: UIViewController, BottomCurtainViewProtocol {
         presenter.stateCurtain = .open
     }
     
-     func closeCurtain(_ duration: TimeInterval = 0.3) {
+    func closeCurtain(_ duration: TimeInterval = 0.3) {
         guard let creatorView = creatorView else { return }
         UIView.animate(withDuration: duration) { [self] in
             self.view.frame.origin.y = creatorView.bounds.height - self.handleSize.constant
@@ -145,6 +146,12 @@ extension BottomCurtainViewController: UIGestureRecognizerDelegate {
             return false
         }
         return true
+    }
+}
+
+extension BottomCurtainViewController: UITableViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        presenter.didScroll(scrollView: scrollView, handleSize: handleSize.constant, tableView: contentTableView)
     }
 }
 
