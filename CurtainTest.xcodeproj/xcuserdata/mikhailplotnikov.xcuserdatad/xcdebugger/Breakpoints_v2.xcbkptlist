@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "99D296A1-3A84-4BB0-BD91-EF7AE030FDC9"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "472898CA-235B-4474-B8E2-3A7C2F7E8D8F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CurtainTest/BottomCurtain/BottomCurtainViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "handlePanRecognizer(recognizer:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "472898CA-235B-4474-B8E2-3A7C2F7E8D8F - 3c56bdc8ffd89c2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CurtainTest.BottomCurtainViewController.handlePanRecognizer(recognizer: __C.UIPanGestureRecognizer) -&gt; ()"
+                  moduleName = "CurtainTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikhailplotnikov/projects/CurtainTest/CurtainTest/BottomCurtain/BottomCurtainViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "3755">
+               </Location>
+               <Location
+                  uuid = "472898CA-235B-4474-B8E2-3A7C2F7E8D8F - d5adcdbc7bd4b06a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 () -&gt; () in CurtainTest.BottomCurtainViewController.handlePanRecognizer(recognizer: __C.UIPanGestureRecognizer) -&gt; ()"
+                  moduleName = "CurtainTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikhailplotnikov/projects/CurtainTest/CurtainTest/BottomCurtain/BottomCurtainViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "44"
+                  endingLineNumber = "44"
+                  offsetFromSymbolStart = "50">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
