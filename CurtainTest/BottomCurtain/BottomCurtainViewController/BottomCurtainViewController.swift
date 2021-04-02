@@ -51,40 +51,53 @@ class BottomCurtainViewController: UIViewController, BottomCurtainViewProtocol {
     }
     
     func setOrigin(point: CGPoint) {
+        
         self.view.frame.origin = point
     }
     
     func semiOpenCurtain(_ duration: TimeInterval = 0.1) {
+        presenter.stateCurtain = .block
         UIView.animate(withDuration: duration) { [self] in
             
             self.view.frame.origin.y = presenter.calculateSemiHeight(contentTableView: contentTableView)
             
             presenter.blurringBackground(0.5)
             updateHeightContentTableView()
+        } completion: { [self] (finish) in
+            if finish {
+                presenter.stateCurtain = .semi
+            }
         }
-        presenter.stateCurtain = .semi
+        
     }
     
     func openCurtain(_ duration: TimeInterval = 0.1) {
+        presenter.stateCurtain = .block
         guard let creatorView = creatorView else { return }
         UIView.animate(withDuration: duration) { [self] in
             self.view.frame.origin.y = creatorView.bounds.height - (presenter.heightCurtain)
             presenter.blurringBackground(1)
             updateHeightContentTableView()
+        } completion: { [self] finish in
+            if finish {
+                presenter.stateCurtain = .open
+            }
         }
-        
-        presenter.stateCurtain = .open
     }
     
     func closeCurtain(_ duration: TimeInterval = 0.3) {
+        presenter.stateCurtain = .block
         guard let creatorView = creatorView else { return }
         UIView.animate(withDuration: duration) { [self] in
             self.view.frame.origin.y = creatorView.bounds.height - self.handleSize.constant
             presenter.blurringBackground(0)
             updateHeightContentTableView()
+        } completion: { [self] (finish) in
+            if finish {
+                presenter.stateCurtain = .close
+            }
         }
         
-        presenter.stateCurtain = .close
     }
     
     func updateHeightContentTableView() {
@@ -108,8 +121,10 @@ class BottomCurtainViewController: UIViewController, BottomCurtainViewProtocol {
         closeCurtain()
     }
     
+    
     init(heightCurtain: CGFloat) {
-
+        
+        
         self.presenter = BottomCurtainPresenter()
         super.init(nibName: bottomCurtainNibName, bundle: nil)
         presenter.delegate = self
@@ -122,6 +137,7 @@ class BottomCurtainViewController: UIViewController, BottomCurtainViewProtocol {
         let creatorViewTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleCreatorViewTapRecognizer))
         creatorViewTapRecognizer.delegate = self
         
+    
         creatorView?.addGestureRecognizer(creatorViewTapRecognizer)
         handleView.addGestureRecognizer(tapRecognizer)
         handleView.addGestureRecognizer(panRecognizer)
@@ -152,6 +168,15 @@ extension BottomCurtainViewController: UIGestureRecognizerDelegate {
 extension BottomCurtainViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         presenter.didScroll(scrollView: scrollView, handleSize: handleSize.constant, tableView: contentTableView)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        presenter.didTouch(scrollView: scrollView)
+        print("touch")
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("end touch")
     }
 }
 

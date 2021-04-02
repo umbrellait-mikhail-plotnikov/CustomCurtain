@@ -11,4 +11,5 @@ enum BottomCurtainStateEnum {
     case open
     case close
     case semi
+    case block
 }
